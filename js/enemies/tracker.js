@@ -1,6 +1,6 @@
 class TrackerEnemy extends Enemy {
     constructor(game, x, y) {
-        super(game, x, y, 35, 18, 180);
+        super(game, x, y, 35, 18, 60); // 速度降低3倍：180 / 3 = 60
         this.color = this.getRandomColor();
         this.trackingSpeed = 80;
         this.playerLastX = x;
