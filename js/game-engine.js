@@ -135,7 +135,9 @@ class GameEngine {
     
     drawBackground() {
         // 计算一天中的时间（0-24小时），游戏开始时是早上8点
-        const timeOfDay = (8 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于早上8点
+        // 游戏时间流速是现实的100倍，所以1秒游戏时间 = 100秒现实时间
+        // 36秒游戏时间 = 1小时现实时间
+        const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
         
         // 根据时间设置背景颜色
         let skyColor;
@@ -197,30 +199,33 @@ class GameEngine {
     
     drawSunMoon(timeOfDay) {
         const centerX = this.width / 2;
-        const centerY = this.height / 3;
+        const centerY = this.height / 4; // 偏上显示
         
         // 计算太阳和月亮的位置
-        const angle = (timeOfDay / 24) * Math.PI * 2 - Math.PI / 2; // 从底部开始
-        const radius = Math.min(this.width, this.height) / 4;
+        // 调整角度范围，让太阳和月亮从地平线升起和落下
+        const normalizedTime = (timeOfDay - 6) / 12; // 从早上6点开始，12小时为一个周期
+        const angle = normalizedTime * Math.PI - Math.PI / 2; // 从底部开始，到顶部结束
+        const radius = Math.min(this.width, this.height) * 0.6; // 更大的半径，让太阳和月亮从地平线升起
+        
         const sunX = centerX + Math.cos(angle) * radius;
         const sunY = centerY + Math.sin(angle) * radius;
         
-        // 绘制月亮（晚上）
-        if (timeOfDay >= 18 || timeOfDay < 6) {
+        // 绘制月亮（晚上，19点以后升起）
+        if (timeOfDay >= 19 || timeOfDay < 6) {
             this.ctx.fillStyle = '#F3F4F6';
             this.ctx.beginPath();
             this.ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
             this.ctx.fill();
             
             // 绘制月亮的暗面
-            this.ctx.fillStyle = timeOfDay >= 18 ? '#1E40AF' : '#4a5568';
+            this.ctx.fillStyle = timeOfDay >= 19 ? '#1E40AF' : '#4a5568';
             this.ctx.beginPath();
             this.ctx.arc(sunX - 10, sunY - 10, 40, 0, Math.PI * 2);
             this.ctx.fill();
         }
         
-        // 绘制太阳（白天）
-        if (timeOfDay >= 6 && timeOfDay < 18) {
+        // 绘制太阳（白天，6点到19点）
+        if (timeOfDay >= 6 && timeOfDay < 19) {
             this.ctx.fillStyle = '#FBBF24';
             this.ctx.beginPath();
             this.ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
@@ -271,7 +276,7 @@ class GameEngine {
         document.getElementById('time').textContent = Math.floor(this.gameTime);
         
         // 更新时钟显示
-        const timeOfDay = (8 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于早上8点
+        const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
         const hours = Math.floor(timeOfDay);
         const minutes = Math.floor((timeOfDay - hours) * 60);
         const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
