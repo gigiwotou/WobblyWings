@@ -3,6 +3,7 @@ class GiantEnemy extends Enemy {
         // 巨型敌人，大小是普通敌人的3倍
         super(game, x, y, 90, 45, 100);
         this.color = this.getRandomColor();
+        this.dead = false;
     }
     
     getRandomColor() {

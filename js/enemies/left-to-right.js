@@ -3,8 +3,10 @@ class LeftToRightEnemy extends Enemy {
         // 从左向右飞行的敌人，速度是玩家最大速度的0.8
         const playerMaxSpeed = 500;
         const speed = playerMaxSpeed * 0.8;
-        super(game, x, y, 30, 15, -speed); // 速度为负值，表示从左向右飞
+        super(game, x, y, 30, 15, 0); // 基础速度设为0，我们自己控制
+        this.leftToRightSpeed = speed; // 保存从左向右的速度
         this.color = this.getRandomColor();
+        this.dead = false;
     }
     
     getRandomColor() {
@@ -13,8 +15,11 @@ class LeftToRightEnemy extends Enemy {
     }
     
     update(deltaTime) {
+        // 先调用父类update，但不使用父类的移动
+        // super.update(deltaTime);
+        
         // 从左向右飞行
-        this.x += this.speed * deltaTime;
+        this.x += this.leftToRightSpeed * deltaTime;
         
         // 检查是否超出屏幕
         if (this.x > this.game.scrollX + this.game.width) {

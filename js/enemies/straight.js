@@ -6,6 +6,7 @@ class StraightEnemy extends Enemy {
         const height = 15 * sizeMultiplier;
         super(game, x, y, width, height, 150);
         this.color = this.getRandomColor();
+        this.dead = false;
     }
     
     getRandomColor() {

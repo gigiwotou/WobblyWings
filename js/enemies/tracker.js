@@ -16,6 +16,7 @@ class TrackerEnemy extends Enemy {
         this.rubberBandStrength = 200;
         this.damping = 0.92;
         this.maxSpeed = 500 / 3; // 玩家飞机最大速度的1/3
+        this.dead = false;
     }
     
     getRandomColor() {
