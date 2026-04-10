@@ -130,8 +130,8 @@ class GameEngine {
     }
     
     drawBackground() {
-        // 计算一天中的时间（0-24小时）
-        const timeOfDay = (this.gameTime / 30) % 24; // 每30秒为一天
+        // 计算一天中的时间（0-24小时），游戏开始时是清晨6点
+        const timeOfDay = (6 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于清晨6点
         
         // 根据时间设置背景颜色
         let skyColor;
