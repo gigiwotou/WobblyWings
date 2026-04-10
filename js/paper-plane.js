@@ -21,6 +21,19 @@ class PaperPlane {
         this.velocityX = 0;
         this.velocityY = 0;
         
+        // 碰撞效果
+        this.collisionEffect = {
+            normal: false,
+            normalTimer: 0,
+            giant: false,
+            giantTimer: 0,
+            leftToRight: false,
+            leftToRightTimer: 0
+        };
+        
+        // 原始速度
+        this.originalMaxSpeed = 500;
+        
         // 添加粒子系统到游戏实体
         this.game.addEntity(this.particleSystem);
     }
@@ -28,7 +41,9 @@ class PaperPlane {
     update(deltaTime) {
         // 晃晃悠悠的飞行姿态
         this.wobbleTime += deltaTime;
-        this.wobbleAmplitude = 0.1;
+        
+        // 碰撞效果处理
+        this.handleCollisionEffects(deltaTime);
         
         // 更新目标位置为鼠标位置（考虑滚动偏移）
         this.targetX = this.game.scrollX + this.game.mouse.x;
@@ -43,8 +58,56 @@ class PaperPlane {
         // 边界检查
         this.checkBounds();
         
-        // 生成尾烟（从飞机尾部发出）
+        // 生成尾烟
         this.particleSystem.emit(this.x + 10, this.y + this.height / 2);
+    }
+    
+    handleCollisionEffects(deltaTime) {
+        // 普通敌人碰撞效果
+        if (this.collisionEffect.normal) {
+            this.collisionEffect.normalTimer += deltaTime;
+            this.wobbleAmplitude = 0.3; // 增加抖动
+            this.maxSpeed = this.originalMaxSpeed * 0.7; // 降低速度
+            
+            if (this.collisionEffect.normalTimer >= 5) {
+                this.collisionEffect.normal = false;
+                this.collisionEffect.normalTimer = 0;
+                this.wobbleAmplitude = 0.1;
+                this.maxSpeed = this.originalMaxSpeed;
+            }
+        }
+        
+        // 巨型敌人碰撞效果
+        if (this.collisionEffect.giant) {
+            this.collisionEffect.giantTimer += deltaTime;
+            this.maxSpeed = this.originalMaxSpeed * 0.99; // 降低1%
+            
+            if (this.collisionEffect.giantTimer >= 30) {
+                this.collisionEffect.giant = false;
+                this.collisionEffect.giantTimer = 0;
+                this.maxSpeed = this.originalMaxSpeed;
+            }
+        }
+        
+        // 从左向右飞行的敌人碰撞效果
+        if (this.collisionEffect.leftToRight) {
+            this.collisionEffect.leftToRightTimer += deltaTime;
+            this.wobbleAmplitude = 0.4; // 剧烈抖动
+            this.maxSpeed = this.originalMaxSpeed * 0.7; // 降低速度
+            
+            // 不受控制的乱飞
+            if (Math.random() < 0.3) {
+                this.velocityX += (Math.random() - 0.5) * 100;
+                this.velocityY += (Math.random() - 0.5) * 100;
+            }
+            
+            if (this.collisionEffect.leftToRightTimer >= 3) {
+                this.collisionEffect.leftToRight = false;
+                this.collisionEffect.leftToRightTimer = 0;
+                this.wobbleAmplitude = 0.1;
+                this.maxSpeed = this.originalMaxSpeed;
+            }
+        }
     }
     
     applyRubberBandPhysics(deltaTime) {

@@ -130,20 +130,44 @@ class GameEngine {
     }
     
     drawBackground() {
+        // 计算一天中的时间（0-24小时）
+        const timeOfDay = (this.gameTime / 30) % 24; // 每30秒为一天
+        
+        // 根据时间设置背景颜色
+        let skyColor;
+        if (timeOfDay < 6) {
+            // 深夜
+            skyColor = '#0a1128';
+        } else if (timeOfDay < 9) {
+            // 清晨
+            skyColor = '#87CEEB';
+        } else if (timeOfDay < 17) {
+            // 白天
+            skyColor = '#4DA6FF';
+        } else if (timeOfDay < 20) {
+            // 黄昏
+            skyColor = '#FF8C42';
+        } else {
+            // 夜晚
+            skyColor = '#1a2b4a';
+        }
+        
         // 绘制天空背景
-        this.ctx.fillStyle = '#87CEEB';
+        this.ctx.fillStyle = skyColor;
         this.ctx.fillRect(0, 0, this.width, this.height);
         
-        // 绘制云朵
-        this.ctx.fillStyle = 'white';
-        const cloudSpeed = 0.5;
-        const cloudOffset = (this.gameTime * cloudSpeed + this.scrollX * 0.1) % 200;
-        
-        // 绘制几朵云，考虑滚动效果
-        for (let i = 0; i < 5; i++) {
-            const x = (i * 200 - cloudOffset) % (this.width + 200);
-            const y = 80 + Math.sin(i * 0.5) * 70;
-            this.drawCloud(x, y);
+        // 绘制云朵（只在白天显示）
+        if (timeOfDay >= 6 && timeOfDay < 18) {
+            this.ctx.fillStyle = 'white';
+            const cloudSpeed = 0.5;
+            const cloudOffset = (this.gameTime * cloudSpeed + this.scrollX * 0.1) % 200;
+            
+            // 绘制几朵云，考虑滚动效果
+            for (let i = 0; i < 5; i++) {
+                const x = (i * 200 - cloudOffset) % (this.width + 200);
+                const y = 80 + Math.sin(i * 0.5) * 70;
+                this.drawCloud(x, y);
+            }
         }
     }
     

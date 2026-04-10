@@ -5,6 +5,10 @@ class GameState {
         this.enemySpawnInterval = 1.5;
         this.difficultyIncreaseTimer = 0;
         this.difficultyIncreaseInterval = 10;
+        this.giantEnemyTimer = 0;
+        this.giantEnemyInterval = 30; // 每30秒生成一个巨型敌人
+        this.leftToRightEnemyTimer = 0;
+        this.leftToRightEnemyInterval = 5; // 每5秒生成一个从左向右飞行的敌人
         this.dead = false;
     }
     
@@ -16,6 +20,20 @@ class GameState {
             this.enemySpawnTimer = 0;
         }
         
+        // 巨型敌人
+        this.giantEnemyTimer += deltaTime;
+        if (this.giantEnemyTimer >= this.giantEnemyInterval) {
+            this.spawnGiantEnemy();
+            this.giantEnemyTimer = 0;
+        }
+        
+        // 从左向右飞行的敌人
+        this.leftToRightEnemyTimer += deltaTime;
+        if (this.leftToRightEnemyTimer >= this.leftToRightEnemyInterval) {
+            this.spawnLeftToRightEnemy();
+            this.leftToRightEnemyTimer = 0;
+        }
+        
         // 难度递增
         this.difficultyIncreaseTimer += deltaTime;
         if (this.difficultyIncreaseTimer >= this.difficultyIncreaseInterval) {
@@ -25,10 +43,6 @@ class GameState {
         
         // 碰撞检测
         CollisionDetector.checkAllCollisions(this.game);
-    }
-    
-    render(ctx) {
-        // GameState不需要渲染任何内容
     }
     
     spawnEnemy() {
@@ -43,6 +57,18 @@ class GameState {
             // 30% 概率生成追踪敌人
             this.game.addEntity(new TrackerEnemy(this.game, x, y));
         }
+    }
+    
+    spawnGiantEnemy() {
+        const x = this.game.scrollX + this.game.width;
+        const y = Math.random() * (this.game.height - 100);
+        this.game.addEntity(new GiantEnemy(this.game, x, y));
+    }
+    
+    spawnLeftToRightEnemy() {
+        const x = this.game.scrollX - 50; // 从屏幕左侧外生成
+        const y = Math.random() * (this.game.height - 50);
+        this.game.addEntity(new LeftToRightEnemy(this.game, x, y));
     }
     
     increaseDifficulty() {

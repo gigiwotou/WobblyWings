@@ -1,10 +1,7 @@
-class StraightEnemy extends Enemy {
+class GiantEnemy extends Enemy {
     constructor(game, x, y) {
-        // 随机大小
-        const sizeMultiplier = 0.8 + Math.random() * 0.4; // 0.8 到 1.2 倍
-        const width = 30 * sizeMultiplier;
-        const height = 15 * sizeMultiplier;
-        super(game, x, y, width, height, 150);
+        // 巨型敌人，大小是普通敌人的3倍
+        super(game, x, y, 90, 45, 100);
         this.color = this.getRandomColor();
     }
     
@@ -16,9 +13,9 @@ class StraightEnemy extends Enemy {
     render(ctx) {
         ctx.fillStyle = this.color;
         ctx.strokeStyle = '#333';
-        ctx.lineWidth = 1;
+        ctx.lineWidth = 2;
         
-        // 绘制折纸风格的敌人
+        // 绘制巨型折纸敌人
         ctx.beginPath();
         ctx.moveTo(this.x, this.y + this.height / 2);
         ctx.lineTo(this.x + this.width, this.y);
@@ -27,10 +24,21 @@ class StraightEnemy extends Enemy {
         ctx.fill();
         ctx.stroke();
         
-        // 折痕
+        // 机翼折痕
         ctx.beginPath();
         ctx.moveTo(this.x + this.width / 2, this.y);
         ctx.lineTo(this.x + this.width / 2, this.y + this.height);
         ctx.stroke();
+        
+        // 机鼻折痕
+        ctx.beginPath();
+        ctx.moveTo(this.x + this.width, this.y + this.height / 2);
+        ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
+        ctx.stroke();
+        
+        // 标记为巨型敌人
+        ctx.fillStyle = 'black';
+        ctx.font = '16px Arial';
+        ctx.fillText('巨型', this.x + this.width / 2 - 15, this.y + this.height / 2 + 5);
     }
 }

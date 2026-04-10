@@ -20,16 +20,26 @@ class CollisionDetector {
         for (const entity of entities) {
             if (entity instanceof Enemy) {
                 if (this.checkCollision(player, entity)) {
-                    // 碰撞发生
-                    game.stop();
-                    player.destroy();
+                    // 根据敌人类型触发不同的碰撞效果
+                    if (entity instanceof GiantEnemy) {
+                        // 巨型敌人碰撞效果
+                        player.collisionEffect.giant = true;
+                        player.collisionEffect.giantTimer = 0;
+                    } else if (entity instanceof LeftToRightEnemy) {
+                        // 从左向右飞行的敌人碰撞效果
+                        player.collisionEffect.leftToRight = true;
+                        player.collisionEffect.leftToRightTimer = 0;
+                    } else {
+                        // 普通敌人碰撞效果
+                        player.collisionEffect.normal = true;
+                        player.collisionEffect.normalTimer = 0;
+                    }
                     
-                    // 跳转到游戏结束页面
-                    setTimeout(() => {
-                        window.location.href = `gameover.html?score=${game.getScore()}&time=${game.getTime()}`;
-                    }, 500);
+                    // 敌人被碰撞后消失
+                    entity.dead = true;
                     
-                    break;
+                    // 增加得分
+                    game.score += 20;
                 }
             }
         }

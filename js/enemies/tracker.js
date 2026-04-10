@@ -1,6 +1,10 @@
 class TrackerEnemy extends Enemy {
     constructor(game, x, y) {
-        super(game, x, y, 35, 18, 0); // 基础速度设为0，我们自己控制移动
+        // 随机大小
+        const sizeMultiplier = 0.8 + Math.random() * 0.4; // 0.8 到 1.2 倍
+        const width = 35 * sizeMultiplier;
+        const height = 18 * sizeMultiplier;
+        super(game, x, y, width, height, 0); // 基础速度设为0，我们自己控制移动
         this.color = this.getRandomColor();
         this.trackingSpeed = 0;
         this.playerLastX = x;
