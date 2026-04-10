@@ -8,7 +8,7 @@ class GameEngine {
         this.canvas.height = this.height;
         this.entities = [];
         this.keys = {};
-        this.mouse = { x: 0, y: 0 };
+        this.mouse = { x: 100, y: this.height / 2 };
         this.gameTime = 0;
         this.score = 0;
         this.isRunning = false;
