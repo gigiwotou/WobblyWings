@@ -1,0 +1,253 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #87CEEB;
+    overflow: hidden;
+}
+
+.game-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(to bottom, #87CEEB, #B0E0E6);
+}
+
+/* 主菜单样式 */
+.main-menu {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    position: relative;
+    transform: rotate(-1deg);
+}
+
+.main-menu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 10px;
+    background: linear-gradient(45deg, transparent 33.333%, #87CEEB 33.333%, #87CEEB 66.667%, transparent 66.667%);
+    background-size: 20px 100%;
+}
+
+.game-title {
+    font-size: 3rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    transform: rotate(1deg);
+}
+
+.paper-decoration {
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    position: relative;
+    transform: rotate(5deg);
+}
+
+.paper-decoration::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: white;
+    transform: rotate(-10deg);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.start-button {
+    background-color: #FF6B6B;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 20px 0;
+    transform: rotate(-1deg);
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 0 #E55555;
+}
+
+.start-button:hover {
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow: 0 5px 0 #E55555;
+}
+
+.start-button:active {
+    transform: rotate(0deg) translateY(3px);
+    box-shadow: 0 0 0 #E55555;
+}
+
+.game-rules {
+    margin-top: 30px;
+    text-align: left;
+    background-color: #F8F9FA;
+    padding: 20px;
+    border-radius: 5px;
+    transform: rotate(1deg);
+}
+
+.game-rules h2 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.game-rules p {
+    margin: 5px 0;
+    color: #666;
+}
+
+/* 游戏界面样式 */
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    width: 800px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px 20px;
+    border-radius: 5px 5px 0 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.score, .time {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+}
+
+#gameCanvas {
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.game-controls {
+    margin-top: 10px;
+    background-color: rgba(255,255,255,0.8);
+    padding: 10px 20px;
+    border-radius: 0 0 5px 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 游戏结束页面样式 */
+.game-over {
+    text-align: center;
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transform: rotate(-1deg);
+}
+
+.game-over h1 {
+    font-size: 2.5rem;
+    color: #FF6B6B;
+    margin-bottom: 30px;
+}
+
+.final-score {
+    margin: 20px 0;
+    font-size: 1.5rem;
+}
+
+.final-score p {
+    margin: 10px 0;
+    color: #333;
+}
+
+.restart-button, .menu-button {
+    background-color: #4ECDC4;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 0 #45B7AA;
+}
+
+.restart-button:hover, .menu-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 0 #45B7AA;
+}
+
+.restart-button:active, .menu-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 0 0 #45B7AA;
+}
+
+.menu-button {
+    background-color: #96CEB4;
+    box-shadow: 0 3px 0 #7FB069;
+}
+
+.menu-button:hover {
+    box-shadow: 0 5px 0 #7FB069;
+}
+
+.menu-button:active {
+    box-shadow: 0 0 0 #7FB069;
+}
+
+/* 响应式设计 */
+@media (max-width: 850px) {
+    .game-header {
+        width: 90vw;
+    }
+    
+    #gameCanvas {
+        width: 90vw;
+        height: 70vh;
+    }
+    
+    .game-title {
+        font-size: 2.5rem;
+    }
+    
+    .main-menu, .game-over {
+        width: 90vw;
+        padding: 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .start-button, .restart-button, .menu-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+    
+    .game-rules {
+        padding: 15px;
+    }
+    
+    .game-rules h2 {
+        font-size: 1.2rem;
+    }
+    
+    .final-score {
+        font-size: 1.2rem;
+    }
+}

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>折纸飞机游戏 - 游戏中</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <div class="score">得分: <span id="score">0</span></div>
+            <div class="time">时间: <span id="time">0</span>s</div>
+        </div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+        <div class="game-controls">
+            <p>使用鼠标或键盘上下方向键控制飞机</p>
+        </div>
+    </div>
+    <script src="js/game-engine.js"></script>
+    <script src="js/particle.js"></script>
+    <script src="js/paper-plane.js"></script>
+    <script src="js/enemy.js"></script>
+    <script src="js/enemies/straight.js"></script>
+    <script src="js/enemies/tracker.js"></script>
+    <script src="js/collision.js"></script>
+    <script src="js/game-state.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
