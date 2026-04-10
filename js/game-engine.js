@@ -100,7 +100,9 @@ class GameEngine {
         
         // 更新所有实体
         for (const entity of this.entities) {
-            entity.update(deltaTime);
+            if (typeof entity.update === 'function') {
+                entity.update(deltaTime);
+            }
         }
         
         // 移除死亡实体
@@ -122,7 +124,9 @@ class GameEngine {
         
         // 绘制所有实体
         for (const entity of this.entities) {
-            entity.render(this.ctx);
+            if (typeof entity.render === 'function') {
+                entity.render(this.ctx);
+            }
         }
         
         // 恢复状态
