@@ -1,13 +1,17 @@
 class TrackerEnemy extends Enemy {
     constructor(game, x, y) {
-        super(game, x, y, 35, 18, 60); // 速度降低3倍：180 / 3 = 60
+        super(game, x, y, 35, 18, 0); // 基础速度设为0，我们自己控制移动
         this.color = this.getRandomColor();
-        this.trackingSpeed = 80;
+        this.trackingSpeed = 0;
         this.playerLastX = x;
         this.playerLastY = y;
         this.targetY = y;
         this.trackingDelay = 1.0; // 追踪延迟时间（秒）
         this.trackingTimer = 0;
+        this.velocityY = 0;
+        this.rubberBandStrength = 200;
+        this.damping = 0.92;
+        this.maxSpeed = 500 / 3; // 玩家飞机最大速度的1/3
     }
     
     getRandomColor() {
@@ -16,7 +20,11 @@ class TrackerEnemy extends Enemy {
     }
     
     update(deltaTime) {
-        super.update(deltaTime);
+        // 先调用父类update，但不使用父类的移动
+        // 我们自己控制X和Y方向的移动
+        
+        // X方向移动（与场景滚动保持一致）
+        this.x -= this.game.scrollSpeed * deltaTime;
         
         // 追踪玩家，但有延迟
         this.trackingTimer += deltaTime;
@@ -30,9 +38,34 @@ class TrackerEnemy extends Enemy {
             this.trackingTimer = 0;
         }
         
-        // 向目标位置移动，平滑过渡
+        // 应用橡皮筋物理效果（Y方向）
+        this.applyRubberBandPhysics(deltaTime);
+        
+        // 检查是否超出屏幕
+        if (this.x + this.width < this.game.scrollX) {
+            this.dead = true;
+            // 增加得分
+            this.game.score += 10;
+        }
+    }
+    
+    applyRubberBandPhysics(deltaTime) {
+        // 计算Y方向的距离
         const dy = this.targetY - this.y;
-        this.y += dy * 0.3 * deltaTime * this.trackingSpeed;
+        
+        // 计算橡皮筋拉力（与距离成正比）
+        const forceY = dy * this.rubberBandStrength * deltaTime;
+        
+        // 应用拉力和阻尼
+        this.velocityY = (this.velocityY + forceY) * this.damping;
+        
+        // 限制最大速度
+        if (Math.abs(this.velocityY) > this.maxSpeed) {
+            this.velocityY = this.velocityY > 0 ? this.maxSpeed : -this.maxSpeed;
+        }
+        
+        // 更新Y位置
+        this.y += this.velocityY * deltaTime;
     }
     
     render(ctx) {
