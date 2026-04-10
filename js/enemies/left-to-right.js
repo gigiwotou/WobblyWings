@@ -34,11 +34,11 @@ class LeftToRightEnemy extends Enemy {
         ctx.strokeStyle = '#333';
         ctx.lineWidth = 1;
         
-        // 绘制从左向右飞行的折纸敌人
+        // 绘制从左向右飞行的折纸敌人（机头朝右）
         ctx.beginPath();
-        ctx.moveTo(this.x, this.y + this.height / 2);
-        ctx.lineTo(this.x + this.width, this.y);
-        ctx.lineTo(this.x + this.width, this.y + this.height);
+        ctx.moveTo(this.x + this.width, this.y + this.height / 2); // 机头朝右
+        ctx.lineTo(this.x, this.y);
+        ctx.lineTo(this.x, this.y + this.height);
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
@@ -49,7 +49,7 @@ class LeftToRightEnemy extends Enemy {
         ctx.lineTo(this.x + this.width / 2, this.y + this.height);
         ctx.stroke();
         
-        // 机鼻折痕
+        // 机鼻折痕（现在在右侧）
         ctx.beginPath();
         ctx.moveTo(this.x + this.width, this.y + this.height / 2);
         ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
@@ -58,6 +58,6 @@ class LeftToRightEnemy extends Enemy {
         // 标记为从左向右飞行的敌人
         ctx.fillStyle = 'black';
         ctx.font = '12px Arial';
-        ctx.fillText('←', this.x + this.width / 2 - 5, this.y + this.height / 2 + 3);
+        ctx.fillText('→', this.x + this.width / 2 - 5, this.y + this.height / 2 + 3);
     }
 }
