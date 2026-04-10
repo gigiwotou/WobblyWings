@@ -5,6 +5,7 @@ class GameState {
         this.enemySpawnInterval = 1.5;
         this.difficultyIncreaseTimer = 0;
         this.difficultyIncreaseInterval = 10;
+        this.dead = false;
     }
     
     update(deltaTime) {
@@ -24,6 +25,10 @@ class GameState {
         
         // 碰撞检测
         CollisionDetector.checkAllCollisions(this.game);
+    }
+    
+    render(ctx) {
+        // GameState不需要渲染任何内容
     }
     
     spawnEnemy() {
