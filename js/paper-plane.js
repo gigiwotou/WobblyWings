@@ -30,15 +30,14 @@ class PaperPlane {
         this.wobbleTime += deltaTime;
         this.wobbleAmplitude = 0.1;
         
-        // 更新目标位置为鼠标位置（考虑滚动偏移）
-        this.targetX = this.game.scrollX + this.game.mouse.x;
+        // 飞机保持在屏幕左侧固定的X位置
+        this.x = this.game.scrollX + 100;
+        
+        // 更新目标位置为鼠标Y位置
         this.targetY = this.game.mouse.y;
         
-        // 橡皮筋物理效果
+        // 橡皮筋物理效果（只控制Y方向）
         this.applyRubberBandPhysics(deltaTime);
-        
-        // 纸飞机向前飞行的基础速度
-        this.x += this.speed * deltaTime;
         
         // 根据移动方向调整角度
         this.calculateAngle();
@@ -51,43 +50,36 @@ class PaperPlane {
     }
     
     applyRubberBandPhysics(deltaTime) {
-        // 计算飞机与鼠标的距离
-        const dx = this.targetX - this.x;
+        // 只计算Y方向的距离
         const dy = this.targetY - this.y;
         
         // 计算橡皮筋拉力（与距离成正比）
-        const forceX = dx * this.rubberBandStrength * deltaTime;
         const forceY = dy * this.rubberBandStrength * deltaTime;
         
         // 应用拉力和阻尼
-        this.velocityX = (this.velocityX + forceX) * this.damping;
         this.velocityY = (this.velocityY + forceY) * this.damping;
         
         // 限制最大速度
-        const currentSpeed = Math.sqrt(this.velocityX * this.velocityX + this.velocityY * this.velocityY);
-        if (currentSpeed > this.maxSpeed) {
-            const ratio = this.maxSpeed / currentSpeed;
-            this.velocityX *= ratio;
-            this.velocityY *= ratio;
+        if (Math.abs(this.velocityY) > this.maxSpeed) {
+            this.velocityY = this.velocityY > 0 ? this.maxSpeed : -this.maxSpeed;
         }
         
-        // 更新位置
-        this.x += this.velocityX * deltaTime;
+        // 更新Y位置
         this.y += this.velocityY * deltaTime;
     }
     
     calculateAngle() {
-        // 计算朝向目标的角度
-        const targetAngle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+        // 基于Y方向的速度计算角度
+        const verticalAngle = this.velocityY / this.maxSpeed * 0.3;
         
         // 基础飞行角度
-        const baseAngle = 0.1;
+        const baseAngle = 0.05;
         
         // 结合晃晃悠悠的效果
         const wobbleAngle = Math.sin(this.wobbleTime * 2) * this.wobbleAmplitude;
         
-        // 平滑过渡到目标角度
-        this.angle = baseAngle + targetAngle * 0.3 + wobbleAngle;
+        // 最终角度
+        this.angle = baseAngle + verticalAngle + wobbleAngle;
     }
     
     checkBounds() {
