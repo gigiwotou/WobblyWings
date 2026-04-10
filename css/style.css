@@ -126,7 +126,7 @@ body {
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
 }
 
-.score, .time {
+.score, .time, .clock {
     font-size: 1.2rem;
     font-weight: bold;
     color: #333;

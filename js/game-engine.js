@@ -134,31 +134,46 @@ class GameEngine {
     }
     
     drawBackground() {
-        // 计算一天中的时间（0-24小时），游戏开始时是清晨6点
-        const timeOfDay = (6 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于清晨6点
+        // 计算一天中的时间（0-24小时），游戏开始时是早上8点
+        const timeOfDay = (8 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于早上8点
         
         // 根据时间设置背景颜色
         let skyColor;
-        if (timeOfDay < 6) {
-            // 深夜
+        if (timeOfDay < 4) {
+            // 凌晨
             skyColor = '#0a1128';
+        } else if (timeOfDay < 6) {
+            // 黎明
+            skyColor = '#4a5568';
         } else if (timeOfDay < 9) {
-            // 清晨
+            // 早晨
             skyColor = '#87CEEB';
-        } else if (timeOfDay < 17) {
-            // 白天
+        } else if (timeOfDay < 12) {
+            // 上午
             skyColor = '#4DA6FF';
+        } else if (timeOfDay < 16) {
+            // 正午
+            skyColor = '#3B82F6';
+        } else if (timeOfDay < 18) {
+            // 下午
+            skyColor = '#60A5FA';
         } else if (timeOfDay < 20) {
             // 黄昏
             skyColor = '#FF8C42';
+        } else if (timeOfDay < 22) {
+            // 晚上
+            skyColor = '#1E40AF';
         } else {
-            // 夜晚
-            skyColor = '#1a2b4a';
+            // 深夜
+            skyColor = '#0F172A';
         }
         
         // 绘制天空背景
         this.ctx.fillStyle = skyColor;
         this.ctx.fillRect(0, 0, this.width, this.height);
+        
+        // 绘制太阳和月亮
+        this.drawSunMoon(timeOfDay);
         
         // 绘制云朵（只在白天显示）
         if (timeOfDay >= 6 && timeOfDay < 18) {
@@ -172,6 +187,72 @@ class GameEngine {
                 const y = 80 + Math.sin(i * 0.5) * 70;
                 this.drawCloud(x, y);
             }
+        }
+        
+        // 绘制星星（只在晚上显示）
+        if (timeOfDay >= 20 || timeOfDay < 4) {
+            this.drawStars();
+        }
+    }
+    
+    drawSunMoon(timeOfDay) {
+        const centerX = this.width / 2;
+        const centerY = this.height / 3;
+        
+        // 计算太阳和月亮的位置
+        const angle = (timeOfDay / 24) * Math.PI * 2 - Math.PI / 2; // 从底部开始
+        const radius = Math.min(this.width, this.height) / 4;
+        const sunX = centerX + Math.cos(angle) * radius;
+        const sunY = centerY + Math.sin(angle) * radius;
+        
+        // 绘制月亮（晚上）
+        if (timeOfDay >= 18 || timeOfDay < 6) {
+            this.ctx.fillStyle = '#F3F4F6';
+            this.ctx.beginPath();
+            this.ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // 绘制月亮的暗面
+            this.ctx.fillStyle = timeOfDay >= 18 ? '#1E40AF' : '#4a5568';
+            this.ctx.beginPath();
+            this.ctx.arc(sunX - 10, sunY - 10, 40, 0, Math.PI * 2);
+            this.ctx.fill();
+        }
+        
+        // 绘制太阳（白天）
+        if (timeOfDay >= 6 && timeOfDay < 18) {
+            this.ctx.fillStyle = '#FBBF24';
+            this.ctx.beginPath();
+            this.ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
+            this.ctx.fill();
+            
+            // 绘制太阳光芒
+            this.ctx.strokeStyle = '#FDE68A';
+            this.ctx.lineWidth = 3;
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const startX = sunX + Math.cos(angle) * 40;
+                const startY = sunY + Math.sin(angle) * 40;
+                const endX = sunX + Math.cos(angle) * 55;
+                const endY = sunY + Math.sin(angle) * 55;
+                this.ctx.beginPath();
+                this.ctx.moveTo(startX, startY);
+                this.ctx.lineTo(endX, endY);
+                this.ctx.stroke();
+            }
+        }
+    }
+    
+    drawStars() {
+        this.ctx.fillStyle = 'white';
+        for (let i = 0; i < 50; i++) {
+            const x = Math.random() * this.width;
+            const y = Math.random() * this.height / 2;
+            const size = Math.random() * 2 + 1;
+            
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, size, 0, Math.PI * 2);
+            this.ctx.fill();
         }
     }
     
@@ -188,6 +269,13 @@ class GameEngine {
     updateUI() {
         document.getElementById('score').textContent = Math.floor(this.score);
         document.getElementById('time').textContent = Math.floor(this.gameTime);
+        
+        // 更新时钟显示
+        const timeOfDay = (8 + (this.gameTime / 30)) % 24; // 每30秒为一天，开始于早上8点
+        const hours = Math.floor(timeOfDay);
+        const minutes = Math.floor((timeOfDay - hours) * 60);
+        const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        document.getElementById('clock').textContent = timeString;
     }
     
     getScore() {
