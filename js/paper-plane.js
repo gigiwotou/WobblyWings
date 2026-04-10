@@ -74,14 +74,14 @@ class PaperPlane {
     }
     
     calculateAngle() {
-        // 计算朝向目标的角度
-        const targetAngle = Math.atan2(this.targetY - this.y, this.targetX - this.x);
+        // 机头始终朝右，基于垂直速度调整角度
+        const verticalAngle = this.velocityY / this.maxSpeed * 0.3;
         
         // 结合晃晃悠悠的效果
         const wobbleAngle = Math.sin(this.wobbleTime * 2) * this.wobbleAmplitude;
         
-        // 最终角度（机头朝右，平滑过渡）
-        this.angle = targetAngle * 0.3 + wobbleAngle;
+        // 最终角度（机头朝右）
+        this.angle = verticalAngle + wobbleAngle;
     }
     
     checkBounds() {
