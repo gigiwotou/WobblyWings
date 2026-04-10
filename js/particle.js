@@ -55,7 +55,7 @@ class ParticleSystem {
     
     emit(x, y, count = 5) {
         for (let i = 0; i < count; i++) {
-            const vx = -50 - Math.random() * 50;
+            const vx = -100 - Math.random() * 100; // 尾烟向左飘
             const vy = -20 + Math.random() * 40;
             const life = 0.5 + Math.random() * 0.5;
             const color = { r: 255, g: 0, b: 0 };

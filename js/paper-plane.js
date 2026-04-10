@@ -43,8 +43,8 @@ class PaperPlane {
         // 边界检查
         this.checkBounds();
         
-        // 生成尾烟
-        this.particleSystem.emit(this.x - 20, this.y + this.height / 2);
+        // 生成尾烟（从飞机尾部发出）
+        this.particleSystem.emit(this.x + 10, this.y + this.height / 2);
     }
     
     applyRubberBandPhysics(deltaTime) {
@@ -110,16 +110,16 @@ class PaperPlane {
         ctx.rotate(this.angle);
         ctx.translate(-(this.x + this.width / 2), -(this.y + this.height / 2));
         
-        // 绘制折纸飞机
+        // 绘制折纸飞机（机头朝右）
         ctx.fillStyle = 'white';
         ctx.strokeStyle = '#333';
         ctx.lineWidth = 1;
         
-        // 飞机主体
+        // 飞机主体（机头朝右）
         ctx.beginPath();
-        ctx.moveTo(this.x, this.y + this.height / 2);
-        ctx.lineTo(this.x + this.width, this.y);
-        ctx.lineTo(this.x + this.width, this.y + this.height);
+        ctx.moveTo(this.x + this.width, this.y + this.height / 2); // 机头在右侧中间
+        ctx.lineTo(this.x, this.y); // 左侧上方
+        ctx.lineTo(this.x, this.y + this.height); // 左侧下方
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
@@ -130,7 +130,7 @@ class PaperPlane {
         ctx.lineTo(this.x + this.width / 2, this.y + this.height);
         ctx.stroke();
         
-        // 机鼻折痕
+        // 机鼻折痕（现在在右侧）
         ctx.beginPath();
         ctx.moveTo(this.x + this.width, this.y + this.height / 2);
         ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
