@@ -8,7 +8,7 @@ class PaperPlane {
         this.width = 40;
         this.height = 20;
         this.speed = 100;
-        this.maxSpeed = 250;
+        this.maxSpeed = 500;
         this.angle = 0;
         this.wobbleTime = 0;
         this.wobbleAmplitude = 0.1;
@@ -16,8 +16,8 @@ class PaperPlane {
         this.particleSystem = new ParticleSystem();
         
         // 橡皮筋物理参数
-        this.rubberBandStrength = 200;
-        this.damping = 0.85;
+        this.rubberBandStrength = 400;
+        this.damping = 0.92;
         this.velocityX = 0;
         this.velocityY = 0;
         
