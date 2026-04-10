@@ -4,7 +4,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const game = new GameEngine('gameCanvas');
     
     // 创建纸飞机
-    const paperPlane = new PaperPlane(game, 50, game.height / 2 - 10);
+    const paperPlane = new PaperPlane(game, game.scrollX + 150, game.height / 2 - 20);
     game.addEntity(paperPlane);
     
     // 创建游戏状态

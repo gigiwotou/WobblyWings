@@ -2,7 +2,12 @@ class TrackerEnemy extends Enemy {
     constructor(game, x, y) {
         super(game, x, y, 35, 18, 180);
         this.color = this.getRandomColor();
-        this.trackingSpeed = 100;
+        this.trackingSpeed = 80;
+        this.playerLastX = x;
+        this.playerLastY = y;
+        this.targetY = y;
+        this.trackingDelay = 1.0; // 追踪延迟时间（秒）
+        this.trackingTimer = 0;
     }
     
     getRandomColor() {
@@ -13,12 +18,21 @@ class TrackerEnemy extends Enemy {
     update(deltaTime) {
         super.update(deltaTime);
         
-        // 追踪玩家
-        const player = this.game.entities.find(entity => entity instanceof PaperPlane);
-        if (player) {
-            const dy = player.y - this.y;
-            this.y += dy * 0.5 * deltaTime * this.trackingSpeed;
+        // 追踪玩家，但有延迟
+        this.trackingTimer += deltaTime;
+        
+        if (this.trackingTimer >= this.trackingDelay) {
+            // 每隔一段时间更新一次目标位置
+            const player = this.game.entities.find(entity => entity instanceof PaperPlane);
+            if (player) {
+                this.targetY = player.y;
+            }
+            this.trackingTimer = 0;
         }
+        
+        // 向目标位置移动，平滑过渡
+        const dy = this.targetY - this.y;
+        this.y += dy * 0.3 * deltaTime * this.trackingSpeed;
     }
     
     render(ctx) {
