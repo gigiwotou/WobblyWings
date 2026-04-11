@@ -224,13 +224,21 @@ class GameEngine {
         if (timeOfDay >= 6 && timeOfDay < 18) {
             this.ctx.fillStyle = 'white';
             const cloudSpeed = 0.5;
-            const cloudOffset = (this.gameTime * cloudSpeed + this.scrollX * 0.1) % 200;
             
-            // 绘制几朵云，考虑滚动效果
-            for (let i = 0; i < 5; i++) {
-                const x = (i * 200 - cloudOffset) % (this.width + 200);
-                const y = 80 + Math.sin(i * 0.5) * 70;
-                this.drawCloud(x, y);
+            // 绘制多朵云，考虑滚动效果和错落有致的排列
+            for (let i = 0; i < 8; i++) {
+                // 使用不同的偏移量，使云彩排列错落有致
+                const cloudOffset = (this.gameTime * cloudSpeed + this.scrollX * 0.1 + i * 100) % 400;
+                // 随机选择云彩形状（0-3）
+                const cloudType = i % 4;
+                // 随机大小（0.8-1.2）
+                const cloudSize = 0.8 + Math.sin(i * 0.7 + this.gameTime * 0.1) * 0.4;
+                // 错落有致的Y坐标
+                const y = 80 + Math.sin(i * 0.5 + this.gameTime * 0.05) * 100 + Math.cos(i * 0.3) * 50;
+                // 计算X坐标，考虑滚动效果
+                const x = (i * 300 - cloudOffset) % (this.width + 400);
+                
+                this.drawCloud(x, y, cloudType, cloudSize);
             }
         }
         
@@ -376,13 +384,41 @@ class GameEngine {
         }
     }
     
-    drawCloud(x, y) {
+    drawCloud(x, y, type, size) {
         this.ctx.beginPath();
-        this.ctx.arc(x, y, 30, 0, Math.PI * 2);
-        this.ctx.arc(x + 25, y, 25, 0, Math.PI * 2);
-        this.ctx.arc(x + 50, y, 30, 0, Math.PI * 2);
-        this.ctx.arc(x + 35, y - 15, 20, 0, Math.PI * 2);
-        this.ctx.arc(x + 15, y - 15, 20, 0, Math.PI * 2);
+        
+        switch (type) {
+            case 0: // 第一种云彩形状
+                this.ctx.arc(x, y, 30 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 25 * size, y, 25 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 50 * size, y, 30 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 35 * size, y - 15 * size, 20 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 15 * size, y - 15 * size, 20 * size, 0, Math.PI * 2);
+                break;
+            case 1: // 第二种云彩形状
+                this.ctx.arc(x, y, 25 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 40 * size, y, 35 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 70 * size, y, 25 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 25 * size, y - 10 * size, 15 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 55 * size, y - 10 * size, 15 * size, 0, Math.PI * 2);
+                break;
+            case 2: // 第三种云彩形状
+                this.ctx.arc(x, y, 35 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 30 * size, y + 5 * size, 20 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 60 * size, y, 30 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 15 * size, y - 10 * size, 25 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 45 * size, y - 15 * size, 20 * size, 0, Math.PI * 2);
+                break;
+            case 3: // 第四种云彩形状
+                this.ctx.arc(x, y, 20 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 25 * size, y, 30 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 50 * size, y, 20 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 15 * size, y - 10 * size, 15 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 35 * size, y - 15 * size, 25 * size, 0, Math.PI * 2);
+                this.ctx.arc(x + 55 * size, y - 10 * size, 15 * size, 0, Math.PI * 2);
+                break;
+        }
+        
         this.ctx.fill();
     }
     
