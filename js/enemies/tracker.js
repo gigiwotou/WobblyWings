@@ -10,12 +10,13 @@ class TrackerEnemy extends Enemy {
         this.playerLastX = x;
         this.playerLastY = y;
         this.targetY = y;
-        this.trackingDelay = 1.0; // 追踪延迟时间（秒）
+        this.trackingDelay = 1.2; // 增加追踪延迟时间，让玩家有更多反应时间
         this.trackingTimer = 0;
         this.velocityY = 0;
-        this.rubberBandStrength = 200;
+        this.rubberBandStrength = 150; // 减小橡皮筋强度，降低上下移动速度
         this.damping = 0.92;
-        this.maxSpeed = 500 / 3; // 玩家飞机最大速度的1/3
+        this.maxSpeed = 500 / 4; // 降低上下移动的最大速度
+        this.forwardSpeed = 30; // 增加向前飞行的速度
         this.dead = false;
     }
     
@@ -28,8 +29,8 @@ class TrackerEnemy extends Enemy {
         // 先调用父类update，但不使用父类的移动
         // 我们自己控制X和Y方向的移动
         
-        // X方向移动（与场景滚动保持一致）
-        this.x -= this.game.scrollSpeed * deltaTime;
+        // X方向移动（与场景滚动保持一致，加上额外的向前速度）
+        this.x -= (this.game.scrollSpeed + this.forwardSpeed) * deltaTime;
         
         // 追踪玩家，但有延迟
         this.trackingTimer += deltaTime;
