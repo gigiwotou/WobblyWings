@@ -20,6 +20,7 @@ body {
     justify-content: center;
     position: relative;
     background: linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    z-index: 1;
 }
 
 /* 主菜单样式 */
@@ -31,6 +32,7 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     position: relative;
     transform: rotate(-1deg);
+    z-index: 2;
 }
 
 .main-menu::before {
@@ -124,6 +126,8 @@ body {
     padding: 10px 20px;
     border-radius: 5px 5px 0 0;
     box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 3;
 }
 
 .score, .time, .clock {

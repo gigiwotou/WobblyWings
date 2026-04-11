@@ -247,9 +247,19 @@ class GameEngine {
         // 计算太阳和月亮的位置
         // 调整角度范围，让太阳和月亮从地平线升起和落下
         // 从早上8点开始，太阳已经升到一定高度
-        const normalizedTime = (timeOfDay - 8) / 10; // 从早上8点开始，10小时为一个周期到下午6点
-        const angle = normalizedTime * Math.PI - Math.PI / 4; // 从较低位置开始，到顶部结束
-        const radius = Math.min(this.width, this.height) * 0.5; // 调整半径，让太阳运动更明显
+        let normalizedTime, angle;
+        
+        if (timeOfDay >= 6 && timeOfDay < 19) {
+            // 白天：6点到19点
+            normalizedTime = (timeOfDay - 6) / 13; // 13小时周期
+            angle = normalizedTime * Math.PI - Math.PI / 2; // 从底部开始，到顶部结束
+        } else {
+            // 晚上：19点到6点
+            normalizedTime = (timeOfDay - 19 + 24) % 24 / 11; // 11小时周期
+            angle = normalizedTime * Math.PI - Math.PI / 2; // 从底部开始，到顶部结束
+        }
+        
+        const radius = Math.min(this.width, this.height) * 0.6; // 调整半径，让太阳运动更明显
         
         const sunX = centerX + Math.cos(angle) * radius;
         const sunY = centerY + Math.sin(angle) * radius;
