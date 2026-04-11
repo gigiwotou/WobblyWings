@@ -326,15 +326,31 @@ class GameEngine {
     }
     
     updateUI() {
-        document.getElementById('score').textContent = Math.floor(this.score);
-        document.getElementById('time').textContent = Math.floor(this.gameTime);
-        
-        // 更新时钟显示
-        const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
-        const hours = Math.floor(timeOfDay);
-        const minutes = Math.floor((timeOfDay - hours) * 60);
-        const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-        document.getElementById('clock').textContent = timeString;
+        try {
+            // 更新得分和时间
+            const scoreElement = document.getElementById('score');
+            if (scoreElement) {
+                scoreElement.textContent = Math.floor(this.score);
+            }
+            
+            const timeElement = document.getElementById('time');
+            if (timeElement) {
+                timeElement.textContent = Math.floor(this.gameTime);
+            }
+            
+            // 更新时钟显示
+            const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
+            const hours = Math.floor(timeOfDay);
+            const minutes = Math.floor((timeOfDay - hours) * 60);
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            
+            const clockElement = document.getElementById('clock');
+            if (clockElement) {
+                clockElement.textContent = timeString;
+            }
+        } catch (error) {
+            console.error('Error updating UI:', error);
+        }
     }
     
     getScore() {
