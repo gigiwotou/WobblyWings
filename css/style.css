@@ -46,9 +46,13 @@ body {
     padding: 40px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    position: relative;
-    transform: rotate(-1deg);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-1deg);
     z-index: 2;
+    width: 500px;
+    max-width: 90vw;
 }
 
 .main-menu::before {
