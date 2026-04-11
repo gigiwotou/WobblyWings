@@ -14,6 +14,8 @@ class GameEngine {
         this.isRunning = false;
         this.scrollX = 0;
         this.scrollSpeed = 50;
+        this.fourAmEventTriggered = false;
+        this.fourAmTimer = 0;
         
         // 绑定事件监听器
         this.bindEvents();
@@ -98,6 +100,20 @@ class GameEngine {
         // 场景滚动
         this.scrollX += this.scrollSpeed * deltaTime;
         
+        // 检查凌晨四点事件
+        const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
+        if (timeOfDay >= 4 && timeOfDay < 4.1 && !this.fourAmEventTriggered) {
+            this.triggerFourAmEvent();
+        }
+        
+        // 处理四点事件的10秒倒计时
+        if (this.fourAmEventTriggered) {
+            this.fourAmTimer += deltaTime;
+            if (this.fourAmTimer >= 10) {
+                this.endGame();
+            }
+        }
+        
         // 更新所有实体
         for (const entity of this.entities) {
             if (typeof entity.update === 'function') {
@@ -107,6 +123,33 @@ class GameEngine {
         
         // 移除死亡实体
         this.entities = this.entities.filter(entity => !entity.dead);
+    }
+    
+    triggerFourAmEvent() {
+        this.fourAmEventTriggered = true;
+        this.fourAmTimer = 0;
+        
+        // 创建并显示消息元素
+        const messageElement = document.createElement('div');
+        messageElement.id = 'four-am-message';
+        messageElement.style.position = 'fixed';
+        messageElement.style.top = '50%';
+        messageElement.style.left = '50%';
+        messageElement.style.transform = 'translate(-50%, -50%)';
+        messageElement.style.fontSize = '36px';
+        messageElement.style.fontFamily = 'Arial, sans-serif';
+        messageElement.style.color = 'white';
+        messageElement.style.textAlign = 'center';
+        messageElement.style.zIndex = '1000';
+        messageElement.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+        messageElement.innerHTML = '四点了。<br>但生活，不会停。';
+        
+        document.body.appendChild(messageElement);
+    }
+    
+    endGame() {
+        this.stop();
+        window.location.href = 'index.html';
     }
     
     render() {
@@ -203,9 +246,10 @@ class GameEngine {
         
         // 计算太阳和月亮的位置
         // 调整角度范围，让太阳和月亮从地平线升起和落下
-        const normalizedTime = (timeOfDay - 6) / 12; // 从早上6点开始，12小时为一个周期
-        const angle = normalizedTime * Math.PI - Math.PI / 2; // 从底部开始，到顶部结束
-        const radius = Math.min(this.width, this.height) * 0.6; // 更大的半径，让太阳和月亮从地平线升起
+        // 从早上8点开始，太阳已经升到一定高度
+        const normalizedTime = (timeOfDay - 8) / 10; // 从早上8点开始，10小时为一个周期到下午6点
+        const angle = normalizedTime * Math.PI - Math.PI / 4; // 从较低位置开始，到顶部结束
+        const radius = Math.min(this.width, this.height) * 0.5; // 调整半径，让太阳运动更明显
         
         const sunX = centerX + Math.cos(angle) * radius;
         const sunY = centerY + Math.sin(angle) * radius;
