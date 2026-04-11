@@ -266,6 +266,11 @@ class GameEngine {
         const sunX = centerX + Math.cos(angle) * radius;
         const sunY = adjustedCenterY + Math.sin(angle) * radius;
         
+        // 计算动画参数
+        const animationTime = this.gameTime * 0.5; // 动画速度
+        const blink = Math.sin(animationTime * 5) > 0.8; // 眨眼效果
+        const smileScale = 0.8 + Math.sin(animationTime * 2) * 0.2; // 微笑动画
+        
         // 绘制月亮（晚上，19点以后升起）
         if (timeOfDay >= 19 || timeOfDay < 6) {
             this.ctx.fillStyle = '#F3F4F6';
@@ -278,6 +283,33 @@ class GameEngine {
             this.ctx.beginPath();
             this.ctx.arc(sunX - 10, sunY - 10, 40, 0, Math.PI * 2);
             this.ctx.fill();
+            
+            // 绘制月亮的表情
+            this.ctx.fillStyle = '#333';
+            
+            // 眼睛
+            if (!blink) {
+                // 左眼睛
+                this.ctx.beginPath();
+                this.ctx.arc(sunX - 15, sunY - 5, 5, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // 右眼睛
+                this.ctx.beginPath();
+                this.ctx.arc(sunX + 15, sunY - 5, 5, 0, Math.PI * 2);
+                this.ctx.fill();
+            } else {
+                // 眨眼状态
+                this.ctx.fillRect(sunX - 18, sunY - 5, 6, 2);
+                this.ctx.fillRect(sunX + 12, sunY - 5, 6, 2);
+            }
+            
+            // 嘴巴
+            this.ctx.beginPath();
+            this.ctx.arc(sunX, sunY + 10, 12 * smileScale, 0, Math.PI, false);
+            this.ctx.strokeStyle = '#333';
+            this.ctx.lineWidth = 3;
+            this.ctx.stroke();
         }
         
         // 绘制太阳（白天，6点到19点）
@@ -294,13 +326,40 @@ class GameEngine {
                 const angle = (i / 8) * Math.PI * 2;
                 const startX = sunX + Math.cos(angle) * 40;
                 const startY = sunY + Math.sin(angle) * 40;
-                const endX = sunX + Math.cos(angle) * 55;
-                const endY = sunY + Math.sin(angle) * 55;
+                const endX = sunX + Math.cos(angle) * (55 + Math.sin(animationTime + i) * 5); // 光芒动画
+                const endY = sunY + Math.sin(angle) * (55 + Math.sin(animationTime + i) * 5);
                 this.ctx.beginPath();
                 this.ctx.moveTo(startX, startY);
                 this.ctx.lineTo(endX, endY);
                 this.ctx.stroke();
             }
+            
+            // 绘制太阳的表情
+            this.ctx.fillStyle = '#333';
+            
+            // 眼睛
+            if (!blink) {
+                // 左眼睛
+                this.ctx.beginPath();
+                this.ctx.arc(sunX - 15, sunY - 5, 5, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                // 右眼睛
+                this.ctx.beginPath();
+                this.ctx.arc(sunX + 15, sunY - 5, 5, 0, Math.PI * 2);
+                this.ctx.fill();
+            } else {
+                // 眨眼状态
+                this.ctx.fillRect(sunX - 18, sunY - 5, 6, 2);
+                this.ctx.fillRect(sunX + 12, sunY - 5, 6, 2);
+            }
+            
+            // 嘴巴
+            this.ctx.beginPath();
+            this.ctx.arc(sunX, sunY + 10, 12 * smileScale, 0, Math.PI, false);
+            this.ctx.strokeStyle = '#333';
+            this.ctx.lineWidth = 3;
+            this.ctx.stroke();
         }
     }
     
