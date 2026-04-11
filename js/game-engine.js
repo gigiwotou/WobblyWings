@@ -11,6 +11,7 @@ class GameEngine {
         this.mouse = { x: 100, y: this.height / 2 };
         this.gameTime = 0;
         this.score = 0;
+        this.workCount = 0;
         this.isRunning = false;
         this.scrollX = 0;
         this.scrollSpeed = 50;
@@ -122,6 +123,36 @@ class GameEngine {
             if (typeof entity.update === 'function') {
                 entity.update(deltaTime);
             }
+        }
+        
+        // 更新工作计数
+        this.updateWorkCount(deltaTime);
+    }
+    
+    updateWorkCount(deltaTime) {
+        // 查找玩家飞机
+        const player = this.entities.find(entity => entity instanceof PaperPlane);
+        if (!player) return;
+        
+        // 计算工作增加速度
+        let workSpeed = 1; // 基础速度
+        
+        // 根据玩家速度调整工作速度
+        if (player.collisionEffect.speedReduction && player.collisionEffect.speedReductionTimer > 0) {
+            // 减速时工作速度降低
+            workSpeed = 0.1; // 10%速度
+        }
+        
+        // 计算工作增加量
+        const workIncrease = workSpeed * deltaTime * 2; // 每秒增加2个单位
+        
+        // 更新工作计数
+        this.workCount += workIncrease;
+        
+        // 更新显示
+        const workCountElement = document.getElementById('workCount');
+        if (workCountElement) {
+            workCountElement.textContent = Math.floor(this.workCount);
         }
     }
     
