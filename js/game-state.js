@@ -50,11 +50,11 @@ class GameState {
         const y = Math.random() * (this.game.height - 50);
         
         // 随机生成不同类型的敌人
-        if (Math.random() < 0.7) {
-            // 70% 概率生成直线飞行敌人
+        if (Math.random() < 0.85) {
+            // 85% 概率生成直线飞行敌人
             this.game.addEntity(new StraightEnemy(this.game, x, y));
         } else {
-            // 30% 概率生成追踪敌人
+            // 15% 概率生成追踪敌人（降低50%频率）
             this.game.addEntity(new TrackerEnemy(this.game, x, y));
         }
     }
