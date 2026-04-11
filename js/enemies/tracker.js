@@ -15,8 +15,14 @@ class TrackerEnemy extends Enemy {
         this.velocityY = 0;
         this.rubberBandStrength = 150; // 减小橡皮筋强度，降低上下移动速度
         this.damping = 0.92;
-        this.maxSpeed = 500 / 4; // 降低上下移动的最大速度
-        this.forwardSpeed = 30; // 增加向前飞行的速度
+        // 上下移动的最大速度，添加0-10%的随机增加
+        const maxSpeedBase = 500 / 4;
+        const maxSpeedRandom = maxSpeedBase * (0.9 + Math.random() * 0.2); // 0.9到1.1倍基础速度
+        this.maxSpeed = maxSpeedRandom;
+        // 向前飞行的速度，添加0-10%的随机增加
+        const forwardSpeedBase = 30;
+        const forwardSpeedRandom = forwardSpeedBase * (0.9 + Math.random() * 0.2); // 0.9到1.1倍基础速度
+        this.forwardSpeed = forwardSpeedRandom;
         this.dead = false;
     }
     
