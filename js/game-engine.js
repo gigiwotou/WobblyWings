@@ -114,15 +114,15 @@ class GameEngine {
             }
         }
         
+        // 移除死亡实体
+        this.entities = this.entities.filter(entity => !entity.dead);
+        
         // 更新所有实体
         for (const entity of this.entities) {
             if (typeof entity.update === 'function') {
                 entity.update(deltaTime);
             }
         }
-        
-        // 移除死亡实体
-        this.entities = this.entities.filter(entity => !entity.dead);
     }
     
     triggerFourAmEvent() {

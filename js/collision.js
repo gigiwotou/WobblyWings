@@ -20,7 +20,7 @@ class CollisionDetector {
         for (const entity of entities) {
             if (entity instanceof Enemy) {
                 if (this.checkCollision(player, entity)) {
-                    // 统一的碰撞效果：降低50%速度，持续3秒
+                    // 统一的碰撞效果：降低90%速度，持续3秒
                     player.collisionEffect.speedReduction = true;
                     player.collisionEffect.speedReductionTimer += 3; // 每次碰撞累加3秒
                     
@@ -50,6 +50,10 @@ class CollisionDetector {
                         // 敌机向后推
                         entity.x -= normalizedDx * pushDistance;
                         entity.y -= normalizedDy * pushDistance;
+                        
+                        // 给玩家一个初始速度，增强弹开效果
+                        player.velocityX = normalizedDx * 200;
+                        player.velocityY = normalizedDy * 200;
                     }
                     
                     // 增加得分
