@@ -20,9 +20,9 @@ class CollisionDetector {
         for (const entity of entities) {
             if (entity instanceof Enemy) {
                 if (this.checkCollision(player, entity)) {
-                    // 统一的碰撞效果：降低90%速度，持续3秒
+                    // 统一的碰撞效果：降低90%速度，持续3秒（最多3秒）
                     player.collisionEffect.speedReduction = true;
-                    player.collisionEffect.speedReductionTimer += 3; // 每次碰撞累加3秒
+                    player.collisionEffect.speedReductionTimer = 3; // 每次碰撞刷新为3秒，最多3秒
                     
                     // 计算碰撞方向，实现弹开效果
                     const playerCenterX = player.x + player.width / 2;

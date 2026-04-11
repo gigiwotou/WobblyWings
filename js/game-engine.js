@@ -403,14 +403,27 @@ class GameEngine {
     }
     
     drawStars() {
-        this.ctx.fillStyle = 'white';
-        for (let i = 0; i < 50; i++) {
-            const x = Math.random() * this.width;
-            const y = Math.random() * this.height / 2;
-            const size = Math.random() * 2 + 1;
+        // 初始化星星位置（只在第一次调用时）
+        if (!this.stars) {
+            this.stars = [];
+            for (let i = 0; i < 50; i++) {
+                this.stars.push({
+                    x: Math.random() * this.width,
+                    y: Math.random() * this.height / 2,
+                    size: Math.random() * 2 + 1,
+                    flickerSpeed: Math.random() * 0.5 + 0.5 // 闪烁速度
+                });
+            }
+        }
+        
+        // 绘制星星
+        for (const star of this.stars) {
+            // 轻微的闪烁效果
+            const flicker = 0.8 + Math.sin(this.gameTime * star.flickerSpeed) * 0.2;
+            this.ctx.fillStyle = `rgba(255, 255, 255, ${flicker})`;
             
             this.ctx.beginPath();
-            this.ctx.arc(x, y, size, 0, Math.PI * 2);
+            this.ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
             this.ctx.fill();
         }
     }
