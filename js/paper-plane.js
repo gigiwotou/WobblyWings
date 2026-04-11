@@ -161,6 +161,38 @@ class PaperPlane {
         ctx.lineTo(this.x + this.width / 2, this.y + this.height / 2);
         ctx.stroke();
         
+        // 绘制麻痹波浪线特效（当减速效果持续时）
+        if (this.collisionEffect.speedReduction && this.collisionEffect.speedReductionTimer > 0) {
+            ctx.strokeStyle = '#FF0000';
+            ctx.lineWidth = 2;
+            
+            // 上方波浪线
+            ctx.beginPath();
+            for (let i = 0; i < this.width; i += 5) {
+                const x = this.x + i;
+                const y = this.y - 5 + Math.sin(i * 0.2 + this.game.gameTime * 10) * 3;
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+            
+            // 下方波浪线
+            ctx.beginPath();
+            for (let i = 0; i < this.width; i += 5) {
+                const x = this.x + i;
+                const y = this.y + this.height + 5 + Math.sin(i * 0.2 + this.game.gameTime * 10) * 3;
+                if (i === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            ctx.stroke();
+        }
+        
         ctx.restore();
     }
     
