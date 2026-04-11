@@ -327,17 +327,6 @@ class GameEngine {
     
     updateUI() {
         try {
-            // 更新得分和时间
-            const scoreElement = document.getElementById('score');
-            if (scoreElement) {
-                scoreElement.textContent = Math.floor(this.score);
-            }
-            
-            const timeElement = document.getElementById('time');
-            if (timeElement) {
-                timeElement.textContent = Math.floor(this.gameTime);
-            }
-            
             // 更新时钟显示
             const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
             const hours = Math.floor(timeOfDay);
