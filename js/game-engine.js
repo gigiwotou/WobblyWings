@@ -327,15 +327,25 @@ class GameEngine {
     
     updateUI() {
         try {
-            // 更新时钟显示
+            // 更新指针钟显示
             const timeOfDay = (8 + (this.gameTime / 36)) % 24; // 每36秒为一天，开始于早上8点
-            const hours = Math.floor(timeOfDay);
-            const minutes = Math.floor((timeOfDay - hours) * 60);
-            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+            const hours = timeOfDay;
+            const minutes = (timeOfDay - Math.floor(timeOfDay)) * 60;
             
-            const clockElement = document.getElementById('clock');
-            if (clockElement) {
-                clockElement.textContent = timeString;
+            // 计算指针旋转角度
+            const hourAngle = (hours % 12) * 30 + minutes * 0.5; // 每小时30度，每分钟0.5度
+            const minuteAngle = minutes * 6;
+            
+            // 更新时针
+            const hourHand = document.getElementById('hourHand');
+            if (hourHand) {
+                hourHand.style.transform = `translateX(-50%) rotate(${hourAngle}deg)`;
+            }
+            
+            // 更新分针
+            const minuteHand = document.getElementById('minuteHand');
+            if (minuteHand) {
+                minuteHand.style.transform = `translateX(-50%) rotate(${minuteAngle}deg)`;
             }
         } catch (error) {
             console.error('Error updating UI:', error);
