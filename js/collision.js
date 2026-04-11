@@ -41,7 +41,7 @@ class CollisionDetector {
                         const normalizedDy = dy / distance;
                         
                         // 弹开距离
-                        const pushDistance = 50;
+                        const pushDistance = 30; // 减小弹开距离，避免敌人被推到屏幕外
                         
                         // 玩家向后推
                         player.x += normalizedDx * pushDistance;
@@ -50,6 +50,20 @@ class CollisionDetector {
                         // 敌机向后推
                         entity.x -= normalizedDx * pushDistance;
                         entity.y -= normalizedDy * pushDistance;
+                        
+                        // 确保敌人不会被推到屏幕外
+                        if (entity.x + entity.width < game.scrollX) {
+                            entity.x = game.scrollX - entity.width + 10;
+                        }
+                        if (entity.x > game.scrollX + game.width) {
+                            entity.x = game.scrollX + game.width - 10;
+                        }
+                        if (entity.y < 0) {
+                            entity.y = 10;
+                        }
+                        if (entity.y + entity.height > game.height) {
+                            entity.y = game.height - entity.height - 10;
+                        }
                         
                         // 给玩家一个初始速度，增强弹开效果
                         player.velocityX = normalizedDx * 200;
