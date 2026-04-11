@@ -20,23 +20,37 @@ class CollisionDetector {
         for (const entity of entities) {
             if (entity instanceof Enemy) {
                 if (this.checkCollision(player, entity)) {
-                    // 根据敌人类型触发不同的碰撞效果
-                    if (entity instanceof GiantEnemy) {
-                        // 巨型敌人碰撞效果
-                        player.collisionEffect.giant = true;
-                        player.collisionEffect.giantTimer = 0;
-                    } else if (entity instanceof LeftToRightEnemy) {
-                        // 从左向右飞行的敌人碰撞效果
-                        player.collisionEffect.leftToRight = true;
-                        player.collisionEffect.leftToRightTimer = 0;
-                    } else {
-                        // 普通敌人碰撞效果
-                        player.collisionEffect.normal = true;
-                        player.collisionEffect.normalTimer = 0;
-                    }
+                    // 统一的碰撞效果：降低50%速度，持续3秒
+                    player.collisionEffect.speedReduction = true;
+                    player.collisionEffect.speedReductionTimer += 3; // 每次碰撞累加3秒
                     
-                    // 敌人被碰撞后消失
-                    entity.dead = true;
+                    // 计算碰撞方向，实现弹开效果
+                    const playerCenterX = player.x + player.width / 2;
+                    const playerCenterY = player.y + player.height / 2;
+                    const enemyCenterX = entity.x + entity.width / 2;
+                    const enemyCenterY = entity.y + entity.height / 2;
+                    
+                    // 计算方向向量
+                    const dx = playerCenterX - enemyCenterX;
+                    const dy = playerCenterY - enemyCenterY;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0) {
+                        // 归一化方向向量
+                        const normalizedDx = dx / distance;
+                        const normalizedDy = dy / distance;
+                        
+                        // 弹开距离
+                        const pushDistance = 50;
+                        
+                        // 玩家向后推
+                        player.x += normalizedDx * pushDistance;
+                        player.y += normalizedDy * pushDistance;
+                        
+                        // 敌机向后推
+                        entity.x -= normalizedDx * pushDistance;
+                        entity.y -= normalizedDy * pushDistance;
+                    }
                     
                     // 增加得分
                     game.score += 20;

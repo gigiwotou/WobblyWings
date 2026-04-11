@@ -23,12 +23,8 @@ class PaperPlane {
         
         // 碰撞效果
         this.collisionEffect = {
-            normal: false,
-            normalTimer: 0,
-            giant: false,
-            giantTimer: 0,
-            leftToRight: false,
-            leftToRightTimer: 0
+            speedReduction: false,
+            speedReductionTimer: 0
         };
         
         // 原始速度
@@ -63,48 +59,14 @@ class PaperPlane {
     }
     
     handleCollisionEffects(deltaTime) {
-        // 普通敌人碰撞效果
-        if (this.collisionEffect.normal) {
-            this.collisionEffect.normalTimer += deltaTime;
-            this.wobbleAmplitude = 0.3; // 增加抖动
-            this.maxSpeed = this.originalMaxSpeed * 0.7; // 降低速度
+        // 速度降低碰撞效果
+        if (this.collisionEffect.speedReduction && this.collisionEffect.speedReductionTimer > 0) {
+            this.collisionEffect.speedReductionTimer -= deltaTime;
+            this.maxSpeed = this.originalMaxSpeed * 0.5; // 降低50%速度
             
-            if (this.collisionEffect.normalTimer >= 5) {
-                this.collisionEffect.normal = false;
-                this.collisionEffect.normalTimer = 0;
-                this.wobbleAmplitude = 0.1;
-                this.maxSpeed = this.originalMaxSpeed;
-            }
-        }
-        
-        // 巨型敌人碰撞效果
-        if (this.collisionEffect.giant) {
-            this.collisionEffect.giantTimer += deltaTime;
-            this.maxSpeed = this.originalMaxSpeed * 0.99; // 降低1%
-            
-            if (this.collisionEffect.giantTimer >= 30) {
-                this.collisionEffect.giant = false;
-                this.collisionEffect.giantTimer = 0;
-                this.maxSpeed = this.originalMaxSpeed;
-            }
-        }
-        
-        // 从左向右飞行的敌人碰撞效果
-        if (this.collisionEffect.leftToRight) {
-            this.collisionEffect.leftToRightTimer += deltaTime;
-            this.wobbleAmplitude = 0.4; // 剧烈抖动
-            this.maxSpeed = this.originalMaxSpeed * 0.7; // 降低速度
-            
-            // 不受控制的乱飞
-            if (Math.random() < 0.3) {
-                this.velocityX += (Math.random() - 0.5) * 100;
-                this.velocityY += (Math.random() - 0.5) * 100;
-            }
-            
-            if (this.collisionEffect.leftToRightTimer >= 3) {
-                this.collisionEffect.leftToRight = false;
-                this.collisionEffect.leftToRightTimer = 0;
-                this.wobbleAmplitude = 0.1;
+            if (this.collisionEffect.speedReductionTimer <= 0) {
+                this.collisionEffect.speedReduction = false;
+                this.collisionEffect.speedReductionTimer = 0;
                 this.maxSpeed = this.originalMaxSpeed;
             }
         }
