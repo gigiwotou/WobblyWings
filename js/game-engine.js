@@ -246,7 +246,7 @@ class GameEngine {
         
         // 计算太阳和月亮的位置
         // 调整角度范围，让太阳和月亮从地平线升起和落下
-        // 从早上8点开始，太阳已经升到一定高度
+        // 太阳的最高点不高于屏幕上沿
         let normalizedTime, angle;
         
         if (timeOfDay >= 6 && timeOfDay < 19) {
@@ -259,10 +259,12 @@ class GameEngine {
             angle = normalizedTime * Math.PI - Math.PI / 2; // 从底部开始，到顶部结束
         }
         
-        const radius = Math.min(this.width, this.height) * 0.6; // 调整半径，让太阳运动更明显
+        // 调整半径和中心点，确保太阳的最高点不高于屏幕上沿
+        const radius = Math.min(this.width, this.height) * 0.4; // 减小半径
+        const adjustedCenterY = this.height / 3; // 调整中心点位置，使太阳轨迹更低
         
         const sunX = centerX + Math.cos(angle) * radius;
-        const sunY = centerY + Math.sin(angle) * radius;
+        const sunY = adjustedCenterY + Math.sin(angle) * radius;
         
         // 绘制月亮（晚上，19点以后升起）
         if (timeOfDay >= 19 || timeOfDay < 6) {
