@@ -62,7 +62,7 @@ class PaperPlane {
         // 速度降低碰撞效果
         if (this.collisionEffect.speedReduction && this.collisionEffect.speedReductionTimer > 0) {
             this.collisionEffect.speedReductionTimer -= deltaTime;
-            this.maxSpeed = this.originalMaxSpeed * 0.5; // 降低50%速度
+            this.maxSpeed = this.originalMaxSpeed * 0.1; // 降低90%速度，只保留10%
             
             if (this.collisionEffect.speedReductionTimer <= 0) {
                 this.collisionEffect.speedReduction = false;
