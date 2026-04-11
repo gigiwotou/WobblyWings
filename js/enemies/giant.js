@@ -1,7 +1,9 @@
 class GiantEnemy extends Enemy {
     constructor(game, x, y) {
-        // 巨型敌人，大小是普通敌人的3倍
-        super(game, x, y, 90, 45, 100);
+        // 巨型敌人，大小是玩家飞机的15倍
+        const width = 80 * 15; // 玩家飞机宽度的15倍
+        const height = 40 * 15; // 玩家飞机高度的15倍
+        super(game, x, y, width, height, 100);
         this.color = this.getRandomColor();
         this.dead = false;
     }

@@ -3,7 +3,11 @@ class LeftToRightEnemy extends Enemy {
         // 从左向右飞行的敌人，速度是玩家最大速度的0.8
         const playerMaxSpeed = 500;
         const speed = playerMaxSpeed * 0.8;
-        super(game, x, y, 30, 15, 0); // 基础速度设为0，我们自己控制
+        // 随机大小：玩家飞机的0.8到2倍
+        const sizeMultiplier = 0.8 + Math.random() * 1.2; // 0.8 到 2 倍
+        const width = 80 * sizeMultiplier; // 玩家飞机宽度的倍数
+        const height = 40 * sizeMultiplier; // 玩家飞机高度的倍数
+        super(game, x, y, width, height, 0); // 基础速度设为0，我们自己控制
         this.leftToRightSpeed = speed; // 保存从左向右的速度
         this.color = this.getRandomColor();
         this.dead = false;

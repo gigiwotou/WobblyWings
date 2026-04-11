@@ -1,9 +1,9 @@
 class TrackerEnemy extends Enemy {
     constructor(game, x, y) {
-        // 随机大小
-        const sizeMultiplier = 0.8 + Math.random() * 0.4; // 0.8 到 1.2 倍
-        const width = 35 * sizeMultiplier;
-        const height = 18 * sizeMultiplier;
+        // 随机大小：玩家飞机的0.8到2倍
+        const sizeMultiplier = 0.8 + Math.random() * 1.2; // 0.8 到 2 倍
+        const width = 80 * sizeMultiplier; // 玩家飞机宽度的倍数
+        const height = 40 * sizeMultiplier; // 玩家飞机高度的倍数
         super(game, x, y, width, height, 0); // 基础速度设为0，我们自己控制移动
         this.color = this.getRandomColor();
         this.trackingSpeed = 0;
